@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Get unixtime of the required state
+Parameters:
+  StateName:
+    Type: String
+    Default: London
+    AllowedValues:
+    - Amsterdam
+    - Andorra
+    - Astrakhan
+    - Athens
+    - Belgrade
+    - Berlin
+    - Brussels
+    - Bucharest
+    - Budapest
+    - Chisinau
+    - Copenhagen
+    - Dublin
+    - Gibraltar
+    - Helsinki
+    - Istanbul
+    - Kaliningrad
+    - Kiev
+    - Kirov
+    - Lisbon
+    - London
+    - Luxembourg
+    - Madrid
+    - Malta
+    - Minsk
+    - Monaco
+    - Moscow
+    - Oslo
+    - Paris
+    - Prague
+    - Riga
+    - Rome
+    - Samara
+    - Saratov
+    - Simferopol
+    - Sofia
+    - Stockholm
+    - Tallinn
+    - Tirane
+    - Ulyanovsk
+    - Uzhgorod
+    - Vienna
+    - Vilnius
+    - Volgograd
+    - Warsaw
+    - Zaporozhye
+    - Zurich
+Resources:
+  Lambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Code:
+        S3Bucket: mybucket1919
+        S3Key: 83897607f24fd905c6930c15871273fb
+      Role: arn:aws:iam::642547248268:role/service-role/unixtime-role-d07zlg3h
+      Runtime: python3.8
+  GetUnixtime:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      loglevel: debug
+      State:
+        Ref: StateName
+      ServiceToken:
+        Fn::GetAtt:
+        - Lambda
+        - Arn
+Outputs:
+  Result:
+    Value:
+      Fn::GetAtt:
+      - GetUnixtime
+      - Res
